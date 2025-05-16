@@ -40,6 +40,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.coroutines.core)
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-agent:1.0.0-alpha10")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-orchestration:1.0.0-alpha10")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-core:1.0.0-alpha10")
         }
 
         commonTest.dependencies {

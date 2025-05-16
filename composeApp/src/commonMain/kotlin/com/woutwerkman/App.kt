@@ -8,5 +8,5 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 @Composable
 internal fun App() = AppTheme {
-    Text("Hello, World!!!!!!!!!!!")
+    Text("Test")
 }
