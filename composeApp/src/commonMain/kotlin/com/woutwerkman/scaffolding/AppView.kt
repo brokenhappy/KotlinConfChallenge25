@@ -1,19 +1,7 @@
-@file:OptIn(ExperimentalTime::class)
-
 package com.woutwerkman.scaffolding
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,21 +14,21 @@ import com.woutwerkman.App
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 import kotlin.time.times
 
+@Serializable
+data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl: String)
 
 @Composable
 @Preview
-fun AppPreview() {
+fun AppPreview(currentChallenge: Challenge) {
     Column {
         Column(Modifier.weight(1f)) {
             Row(
@@ -66,7 +54,7 @@ fun AppPreview() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFCCCCCC)),
+                    .background(Color(0xFF8B7A5F)),
             )
         }
         Row(Modifier
@@ -74,7 +62,7 @@ fun AppPreview() {
             .background(MaterialTheme.colorScheme.onBackground)
             .padding(10.dp)
         ) {
-            CountDownDisplay(countdownTo(Clock.System.now() + 7.minutes + 5.seconds, interval = 10.milliseconds))
+            CountDownDisplay(countdownTo(currentChallenge.endTime, interval = 10.milliseconds), currentChallenge.duration)
         }
     }
 }
@@ -102,13 +90,13 @@ private fun countdownTo(instant: Instant, interval: Duration): Flow<Duration> = 
 }
 
 @Composable
-private fun CountDownDisplay(countDown: Flow<Duration>) {
+private fun CountDownDisplay(countDown: Flow<Duration>, duration: Duration) {
     val timeLeft by countDown.collectAsState(Duration.ZERO)
     TimeDisplay(
         timeLeft,
         when {
-            timeLeft < 3.minutes -> Color(0xFFE80000)
-            timeLeft < 7.minutes -> Color(0xFFF19900)
+            timeLeft < duration / 3 -> Color(0xFFE80000)
+            timeLeft < duration * 2 / 3 -> Color(0xFFF19900)
             else -> Color(0xFF00FF00)
         },
         MaterialTheme.colorScheme.onBackground,
