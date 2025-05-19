@@ -1,12 +1,51 @@
 package com.woutwerkman
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import com.woutwerkman.theme.AppTheme
+import androidx.compose.animation.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import kotlinconfchallenge25.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Preview
 @Composable
-internal fun App() = AppTheme {
-    Text("Test")
+@OptIn(ExperimentalResourceApi::class, ExperimentalLayoutApi::class)
+fun App() {
+    MaterialTheme {
+        FlowRow(modifier = Modifier.padding(8.dp)) {
+            Image(painterResource(Res.drawable.kodee_waving), null)
+            Text(text = "Hello World!", modifier = Modifier.align(Alignment.CenterVertically))
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalResourceApi::class)
+@Suppress("unused")
+fun ExampleApisForYouToCopyFrom() {
+    Box(Modifier.fillMaxHeight(.5f)) {
+        Image(painterResource(Res.drawable.kodee_waving), null)
+        Image(painterResource(Res.drawable.kodee_cheerful_arms_raised), null)
+        Image(painterResource(Res.drawable.kodee_no_limbs_angry), null)
+        // There's more kodees! Check m out!
+    }
+    Text(text = "Hello World!", color = Color(red = 107, green = 48, blue = 255))
+    Text(text = "Hello World!", color = Color(0xFF7954F6))
+    TextField(
+        value = "",
+        onValueChange = {},
+        placeholder = {
+            Text(text = "Insert text here")
+        },
+    )
+    Button(onClick = {}) {
+        Text("Don't click me!")
+    }
 }
