@@ -75,7 +75,7 @@ fun main(args: Array<String>) = application {
                     println("Error parsing cache file: $e")
                     return@collect
                 }
-                value = cache.challenges
+                value = cache.challengesCache
             }
         }
         if (challenges == null) {
@@ -129,15 +129,9 @@ private fun startSameProgramWithWindowState(windowState: WindowState) {
 @Serializable
 private class DownloadCache(
     val imageCache: Map<String, Blob>,
-    val challenges: List<Challenge>?,
+    val challengesCache: List<Challenge>?,
     val lastPoll: Instant,
 )
-
-private fun DownloadCache.copy(
-    imageCache: Map<String, Blob> = this.imageCache,
-    challengesCache: List<Challenge>? = this.challenges,
-    lastPoll: Instant = this.lastPoll,
-) = DownloadCache(imageCache, challengesCache, lastPoll)
 
 @Serializable(with = Blob.BlobSerializer::class)
 class Blob(private val data: ByteArray) {

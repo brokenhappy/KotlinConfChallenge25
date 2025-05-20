@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -29,40 +30,47 @@ data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl:
 @Composable
 @Preview
 fun AppPreview(currentChallenge: Challenge) {
-    Column {
-        Column(Modifier.weight(1f)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFCCCCCC)),
-            ) {
-                WebsiteView(
-                    modifier = Modifier
-                        .aspectRatio(16 / 9f)
-                        .weight(16 / 9f)
-                ) {
-                    Content()
-                }
-                PhoneView(
-                    modifier = Modifier
-                        .aspectRatio(94 / 197f)
-                        .weight(94 / 197f),
-                ) {
-                    Content()
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF8B7A5F)),
-            )
-        }
-        Row(Modifier
-            .size(width = 750.dp, height = 200.dp)
-            .background(MaterialTheme.colorScheme.onBackground)
-            .padding(10.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFCCCCCC)),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(16 / 9f)
         ) {
-            CountDownDisplay(countdownTo(currentChallenge.endTime, interval = 10.milliseconds), currentChallenge.duration)
+            WebsiteView(
+                modifier = Modifier
+                    .aspectRatio(16 / 9f)
+                    .weight(16 / 9f)
+            ) {
+                Content()
+            }
+
+            Row(Modifier
+                // Whatever else you need
+                .weight(1f)
+                .height(100.dp)
+                .background(MaterialTheme.colorScheme.onBackground)
+                .padding(20.dp)
+                // Whatever else you need
+            ) {
+                CountDownDisplay(countdownTo(currentChallenge.endTime, interval = 10.milliseconds), currentChallenge.duration)
+            }
+        }
+        Column(
+            modifier = Modifier
+                .weight(94 / 197f)
+        ) {
+            PhoneView(
+                modifier = Modifier
+                    .weight(3f)
+                    .aspectRatio(94 / 197f)
+                    .fillMaxHeight(),
+            ) {
+                Content()
+            }
         }
     }
 }
@@ -101,7 +109,7 @@ private fun CountDownDisplay(countDown: Flow<Duration>, duration: Duration) {
         },
         MaterialTheme.colorScheme.onBackground,
         20.dp,
-        2.dp,
+        3.dp,
     )
 }
 
@@ -121,7 +129,7 @@ private fun TimeDisplay(
             activeColor = activeColor,
             segmentWidth = segmentWidth * 1.3,
         )
-        Spacer(Modifier.width(20.dp))
+        Spacer(Modifier.width(10.dp))
         TwoSevenSegmentDigits(seconds, activeColor, inactiveColor, segmentWidth, segmentSpace)
         Spacer(Modifier.width(segmentWidth))
         Column {
@@ -155,7 +163,7 @@ private fun TwoSevenSegmentDigits(
         segmentWidth = segmentWidth,
         segmentsSpace = segmentSpace,
     )
-    Spacer(Modifier.width(30.dp))
+    Spacer(Modifier.width(15.dp))
     SevenSegmentDigit(
         digit = minutes % 10,
         modifier = Modifier.fillMaxHeight(),
