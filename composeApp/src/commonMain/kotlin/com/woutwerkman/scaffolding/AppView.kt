@@ -6,15 +6,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.woutwerkman.App
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -56,7 +61,14 @@ fun AppPreview(currentChallenge: Challenge) {
                 .padding(20.dp)
                 // Whatever else you need
             ) {
-                CountDownDisplay(countdownTo(currentChallenge.endTime, interval = 10.milliseconds), currentChallenge.duration)
+                val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
+                    .shareAsState(Duration.ZERO)
+                val timeShownOnTimer =
+                    if (timeUntilEndOfChallenge > currentChallenge.duration)
+                        timeUntilEndOfChallenge - currentChallenge.duration
+                    else
+                        timeUntilEndOfChallenge
+                CountDownDisplay(timeShownOnTimer, currentChallenge.duration)
             }
         }
         Column(
@@ -98,8 +110,7 @@ private fun countdownTo(instant: Instant, interval: Duration): Flow<Duration> = 
 }
 
 @Composable
-private fun CountDownDisplay(countDown: Flow<Duration>, duration: Duration) {
-    val timeLeft by countDown.collectAsState(Duration.ZERO)
+private fun CountDownDisplay(timeLeft: Duration, duration: Duration) {
     TimeDisplay(
         timeLeft,
         when {
@@ -212,5 +223,14 @@ private fun TwoSevenSegmentDigits(
         segmentsSpace = segmentSpace,
     )
 }
+
+@Composable
+fun <T> Flow<T>.shareAsState(
+    initial: T,
+    scope: CoroutineScope = rememberCoroutineScope(),
+    started: SharingStarted = SharingStarted.Eagerly,
+    replay: Int = 1
+): androidx.compose.runtime.State<T> = remember { shareIn(scope, started, replay) }.collectAsState(initial)
+
 
 private operator fun Dp.times(rhs: Double): Dp = (value * rhs).dp
