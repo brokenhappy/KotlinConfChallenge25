@@ -1,8 +1,11 @@
 package com.woutwerkman.scaffolding
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,8 +14,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.woutwerkman.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -35,32 +41,64 @@ data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl:
 @Composable
 @Preview
 fun AppPreview(currentChallenge: Challenge) {
-    Row(
+    val teamBlue = true
+    val color1 = when (teamBlue) {
+        true -> Color(0xff182d8c)
+        else -> Color(0xff9c0c0e)
+    }
+    val color2 = when (teamBlue) {
+        true -> Color(0xff3950ce)
+        else -> Color(0xffbd2b1e)
+    }
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFCCCCCC)),
-        verticalAlignment = Alignment.CenterVertically,
+            .background(Color.White)
     ) {
-        Column(
-            modifier = Modifier
-                .weight(16 / 9f)
+        Row(
+            modifier = Modifier.weight(0.2f)
+                .height(100.dp)
+                .fillMaxWidth()
+                .padding(15.dp),
         ) {
-            WebsiteView(
+            // Team indicator
+            Row(
                 modifier = Modifier
-                    .aspectRatio(16 / 9f)
-                    .weight(16 / 9f)
+                    .fillMaxWidth(0.33f)
+                    .border(10.dp, color1, RoundedCornerShape(10))
+                    .background(Color.White, RoundedCornerShape(10))
+                    .padding(20.dp)
+                    .fillMaxHeight(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Content()
+                val teamText = when (teamBlue) {
+                    true -> "Team Blue"
+                    else -> "Team Red"
+                }
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = teamText,
+                    textAlign = TextAlign.Center,
+                    fontSize = 110.sp,
+                    color = Color.Black,
+                )
             }
 
-            Row(Modifier
-                // Whatever else you need
-                .weight(1f)
-                .height(100.dp)
-                .background(MaterialTheme.colorScheme.onBackground)
-                .padding(20.dp)
-                // Whatever else you need
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // Countdown
+            Row(
+                Modifier
+                    // Whatever else you need
+                    .background(
+                        MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(10)
+                    )
+                    .padding(20.dp)
+                    .fillMaxWidth(0.5f),
+                horizontalArrangement = Arrangement.Center
             ) {
+
                 val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
                     .shareAsState(Duration.ZERO)
                 val timeShownOnTimer =
@@ -70,18 +108,47 @@ fun AppPreview(currentChallenge: Challenge) {
                         timeUntilEndOfChallenge
                 CountDownDisplay(timeShownOnTimer, currentChallenge.duration)
             }
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // Challenge status
+            // TODO make reactive
+            if (false) {
+                ChallengeStatusIndicator("Challenge running", color1, 60.sp)
+            } else {
+                ChallengeStatusIndicator("Preparing for next Challenge ⏸️", color1, 50.sp)
+            }
         }
-        Column(
-            modifier = Modifier
-                .weight(94 / 197f)
+        Row(
+            modifier = Modifier.weight(0.7f)
+                .padding(10.dp)
         ) {
-            PhoneView(
+            Column(
                 modifier = Modifier
-                    .weight(3f)
-                    .aspectRatio(94 / 197f)
-                    .fillMaxHeight(),
+                    .weight(16 / 9f)
             ) {
-                Content()
+                WebsiteView(
+                    modifier = Modifier
+                        .aspectRatio(16 / 9f)
+                        .weight(16 / 9f),
+                    {
+                        Content()
+                    },
+                    color2
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(94 / 197f),
+            ) {
+                PhoneView(
+                    modifier = Modifier
+                        .weight(3f)
+                        .aspectRatio(94 / 197f)
+                        .fillMaxHeight(),
+                ) {
+                    Content()
+                }
             }
         }
     }
@@ -91,6 +158,29 @@ fun AppPreview(currentChallenge: Challenge) {
 fun Content() {
     Box(modifier = Modifier.fillMaxSize()) {
         App()
+    }
+}
+
+@Composable
+private fun ChallengeStatusIndicator(text: String, borderColor: Color, fontSize: TextUnit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(1f)
+            .border(
+                10.dp,
+                borderColor,
+                RoundedCornerShape(10)
+            )
+            .background(Color.White, RoundedCornerShape(10))
+            .padding(20.dp)
+            .fillMaxHeight(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = text,
+            textAlign = TextAlign.Center,
+            fontSize = fontSize
+        )
     }
 }
 
@@ -167,32 +257,34 @@ private fun TimeDisplay(
     segmentWidth: Dp,
     segmentSpace: Dp
 ) {
-    TwoSevenSegmentDigits(firstDigits, activeColor, inactiveColor, segmentWidth, segmentSpace)
-    Spacer(Modifier.width(segmentWidth))
-    Colon(
-        modifier = Modifier.fillMaxHeight(),
-        activeColor = activeColor,
-        segmentWidth = segmentWidth * 1.3,
-    )
-    Spacer(Modifier.width(10.dp))
-    TwoSevenSegmentDigits(secondDigits, activeColor, inactiveColor, segmentWidth, segmentSpace)
-    Spacer(Modifier.width(segmentWidth))
-    Column {
-        Spacer(Modifier.weight(1f))
-        Row(Modifier.weight(1f)) {
-            Colon(
-                modifier = Modifier.fillMaxHeight(),
-                activeColor = activeColor,
-                segmentWidth = segmentWidth,
-            )
-            Spacer(Modifier.width(10.dp))
-            TwoSevenSegmentDigits(
-                smallDigits,
-                activeColor,
-                inactiveColor,
-                segmentWidth / 2,
-                segmentSpace / 2
-            )
+    Row(modifier = Modifier.aspectRatio(15 / 4f)) {
+        TwoSevenSegmentDigits(firstDigits, activeColor, inactiveColor, segmentWidth, segmentSpace)
+        Spacer(Modifier.width(segmentWidth))
+        Colon(
+            modifier = Modifier.fillMaxHeight(),
+            activeColor = activeColor,
+            segmentWidth = segmentWidth * 1.3,
+        )
+        Spacer(Modifier.width(10.dp))
+        TwoSevenSegmentDigits(secondDigits, activeColor, inactiveColor, segmentWidth, segmentSpace)
+        Spacer(Modifier.width(segmentWidth))
+        Column {
+            Spacer(Modifier.weight(1f))
+            Row(Modifier.weight(1f)) {
+                Colon(
+                    modifier = Modifier.fillMaxHeight(),
+                    activeColor = activeColor,
+                    segmentWidth = segmentWidth,
+                )
+                Spacer(Modifier.width(10.dp))
+                TwoSevenSegmentDigits(
+                    smallDigits,
+                    activeColor,
+                    inactiveColor,
+                    segmentWidth / 2,
+                    segmentSpace / 2
+                )
+            }
         }
     }
 }

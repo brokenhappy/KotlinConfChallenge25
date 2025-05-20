@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import kotlinconfchallenge25.composeapp.generated.resources.Res
 import kotlinconfchallenge25.composeapp.generated.resources.iphone_15_pro_frame
@@ -37,7 +38,7 @@ fun PhoneView(modifier: Modifier, content: @Composable () -> Unit) {
                     ) {
                         Row {
                             Spacer(modifier = Modifier.weight(4f))
-                            Box(modifier = Modifier.weight(86f)) {
+                            Box(modifier = Modifier.weight(86f).clipToBounds()) {
                                 Box(modifier = Modifier.fillMaxSize()) {
                                     content()
                                 }

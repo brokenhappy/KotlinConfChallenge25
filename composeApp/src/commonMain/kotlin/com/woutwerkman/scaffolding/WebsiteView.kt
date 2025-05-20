@@ -20,9 +20,14 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun WebsiteView(modifier: Modifier, content: @Composable () -> Unit) {
+fun WebsiteView(
+    modifier: Modifier,
+    content: @Composable () -> Unit,
+    bgColor: Color = Color(0.8f, 0.8f, 0.8f)
+) {
+    val tabColor = Color.White
     Box(modifier = Modifier
-        .background(Color(0xFFCCCCCC))
+        .background(bgColor, shape = RoundedCornerShape(8.dp))
         .then(modifier)
     ) {
         Column(
@@ -39,9 +44,9 @@ fun WebsiteView(modifier: Modifier, content: @Composable () -> Unit) {
                 Row(
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .background(Color.White)
+                        .background(tabColor)
                         .clip(RoundedCornerShape(bottomEnd = 8.dp))
-                        .background(Color(0xFFCCCCCC))
+                        .background(bgColor)
                         .height(28.dp)
                         .width(8.dp)
                 ) {}
@@ -50,7 +55,7 @@ fun WebsiteView(modifier: Modifier, content: @Composable () -> Unit) {
                         .padding(top = 8.dp)
                         .clip(RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp))
                         .height(28.dp)
-                        .background(Color.White)
+                        .background(tabColor)
                         .padding(start = 4.dp, end = 16.dp)
                 ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
@@ -64,9 +69,9 @@ fun WebsiteView(modifier: Modifier, content: @Composable () -> Unit) {
                 Row(
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .background(Color.White)
+                        .background(tabColor)
                         .clip(RoundedCornerShape(bottomStart = 8.dp))
-                        .background(Color(0xFFCCCCCC))
+                        .background(bgColor)
                         .height(28.dp)
                         .width(8.dp)
                 ) {}
