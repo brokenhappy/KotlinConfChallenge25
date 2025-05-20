@@ -41,7 +41,7 @@ data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl:
 @Composable
 @Preview
 fun AppPreview(currentChallenge: Challenge) {
-    val teamBlue = true
+    val teamBlue = false
     val color1 = when (teamBlue) {
         true -> Color(0xff182d8c)
         else -> Color(0xff9c0c0e)
@@ -60,6 +60,7 @@ fun AppPreview(currentChallenge: Challenge) {
                 .height(100.dp)
                 .fillMaxWidth()
                 .padding(15.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // Team indicator
             Row(
@@ -85,6 +86,8 @@ fun AppPreview(currentChallenge: Challenge) {
             }
 
             Spacer(modifier = Modifier.width(10.dp))
+            val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
+                .shareAsState(Duration.ZERO)
 
             // Countdown
             Row(
@@ -96,11 +99,8 @@ fun AppPreview(currentChallenge: Challenge) {
                     )
                     .padding(20.dp)
                     .fillMaxWidth(0.5f),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
-
-                val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
-                    .shareAsState(Duration.ZERO)
                 val timeShownOnTimer =
                     if (timeUntilEndOfChallenge > currentChallenge.duration)
                         timeUntilEndOfChallenge - currentChallenge.duration
@@ -111,9 +111,7 @@ fun AppPreview(currentChallenge: Challenge) {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            // Challenge status
-            // TODO make reactive
-            if (false) {
+            if (timeUntilEndOfChallenge <= currentChallenge.duration) {
                 ChallengeStatusIndicator("Challenge running", color1, 60.sp)
             } else {
                 ChallengeStatusIndicator("Preparing for next Challenge ⏸️", color1, 50.sp)
@@ -131,6 +129,7 @@ fun AppPreview(currentChallenge: Challenge) {
                     modifier = Modifier
                         .aspectRatio(16 / 9f)
                         .weight(16 / 9f),
+                    teamName = if (teamBlue) "Blue" else "Red",
                     {
                         Content()
                     },

@@ -22,6 +22,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun WebsiteView(
     modifier: Modifier,
+    teamName: String,
     content: @Composable () -> Unit,
     bgColor: Color = Color(0.8f, 0.8f, 0.8f)
 ) {
@@ -60,7 +61,7 @@ fun WebsiteView(
                 ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Text(
-                        text = "Preview of: $TeamName",
+                        text = "Preview of: $teamName",
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(start = 8.dp),
