@@ -122,27 +122,66 @@ private fun TimeDisplay(
     segmentSpace: Dp,
 ) {
     time.toComponents { hours, minutes, seconds, nanoseconds ->
-        TwoSevenSegmentDigits(minutes, activeColor, inactiveColor, segmentWidth, segmentSpace)
-        Spacer(Modifier.width(segmentWidth))
-        Colon(
-            modifier = Modifier.fillMaxHeight(),
-            activeColor = activeColor,
-            segmentWidth = segmentWidth * 1.3,
-        )
-        Spacer(Modifier.width(10.dp))
-        TwoSevenSegmentDigits(seconds, activeColor, inactiveColor, segmentWidth, segmentSpace)
-        Spacer(Modifier.width(segmentWidth))
-        Column {
-            Spacer(Modifier.weight(1f))
-            Row(Modifier.weight(1f)) {
-                Colon(
-                    modifier = Modifier.fillMaxHeight(),
-                    activeColor = activeColor,
-                    segmentWidth = segmentWidth,
-                )
-                Spacer(Modifier.width(10.dp))
-                TwoSevenSegmentDigits(nanoseconds / 10_000_000, activeColor, inactiveColor, segmentWidth / 2, segmentSpace / 2)
-            }
+        if (hours <= 0) {
+            TimeDisplay(
+                firstDigits = minutes,
+                secondDigits = seconds,
+                smallDigits = nanoseconds / 10.milliseconds.inWholeNanoseconds.toInt(),
+                activeColor = activeColor,
+                inactiveColor = inactiveColor,
+                segmentWidth = segmentWidth,
+                segmentSpace = segmentSpace,
+            )
+        } else {
+            TimeDisplay(
+                firstDigits = hours.toInt(),
+                secondDigits = minutes,
+                smallDigits = seconds,
+                activeColor = activeColor,
+                inactiveColor = inactiveColor,
+                segmentWidth = segmentWidth,
+                segmentSpace = segmentSpace,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TimeDisplay(
+    firstDigits: Int,
+    secondDigits: Int,
+    smallDigits: Int,
+    activeColor: Color,
+    inactiveColor: Color,
+    segmentWidth: Dp,
+    segmentSpace: Dp
+) {
+    TwoSevenSegmentDigits(firstDigits, activeColor, inactiveColor, segmentWidth, segmentSpace)
+    Spacer(Modifier.width(segmentWidth))
+    Colon(
+        modifier = Modifier.fillMaxHeight(),
+        activeColor = activeColor,
+        segmentWidth = segmentWidth * 1.3,
+    )
+    Spacer(Modifier.width(10.dp))
+    TwoSevenSegmentDigits(secondDigits, activeColor, inactiveColor, segmentWidth, segmentSpace)
+    Spacer(Modifier.width(segmentWidth))
+    Column {
+        Spacer(Modifier.weight(1f))
+        Row(Modifier.weight(1f)) {
+            Colon(
+                modifier = Modifier.fillMaxHeight(),
+                activeColor = activeColor,
+                segmentWidth = segmentWidth,
+            )
+            Spacer(Modifier.width(10.dp))
+            TwoSevenSegmentDigits(
+                smallDigits,
+                activeColor,
+                inactiveColor,
+                segmentWidth / 2,
+                segmentSpace / 2
+            )
         }
     }
 }
