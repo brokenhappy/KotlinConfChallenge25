@@ -88,14 +88,14 @@ fun main(args: Array<String>) = application {
             return@Window
         }
 
-        val now = produceState(Clock.System.now()) {
+        val now by produceState(Clock.System.now()) {
             while (true) {
                 delay(100.milliseconds)
                 value = Clock.System.now()
             }
         }
 
-        val currentChallenge = remember(now, challenges) { challenges?.firstOrNull { now.value < (it.endTime + 3.minutes) } }
+        val currentChallenge = remember(now, challenges) { challenges?.firstOrNull { now < (it.endTime + 3.minutes) } }
         if (currentChallenge == null) {
             Box(
                 modifier = Modifier.fillMaxSize(),
