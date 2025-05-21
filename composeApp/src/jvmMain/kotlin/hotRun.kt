@@ -95,7 +95,7 @@ fun main(args: Array<String>) = application {
             }
         }
 
-        val currentChallenge = remember(now, challenges) { challenges?.firstOrNull { now.value < (it.endTime + 10.minutes) } }
+        val currentChallenge = remember(now, challenges) { challenges?.firstOrNull { now.value < (it.endTime + 3.minutes) } }
         if (currentChallenge == null) {
             Box(
                 modifier = Modifier.fillMaxSize(),
