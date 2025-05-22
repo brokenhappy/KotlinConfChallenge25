@@ -179,7 +179,7 @@ fun Ad() {
     ) {
         if (maxWidth > maxHeight) {
             Row {
-                InternalAd(isWide = false)
+                InternalAd(isWide = true)
             }
         } else {
             Column(
@@ -193,7 +193,7 @@ fun Ad() {
                     )
                 ,
             ) {
-                InternalAd(isWide = true)
+                InternalAd(isWide = false)
             }
         }
     }
