@@ -396,7 +396,7 @@ fun <T> Flow<T>.shareAsState(
     scope: CoroutineScope = rememberCoroutineScope(),
     started: SharingStarted = SharingStarted.Eagerly,
     replay: Int = 1
-): State<T> = remember { shareIn(scope, started, replay) }.collectAsState(initial)
+): State<T> = remember(key) { shareIn(scope, started, replay) }.collectAsState(initial)
 
 
 private operator fun Dp.times(rhs: Double): Dp = (value * rhs).dp
