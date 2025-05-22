@@ -184,7 +184,7 @@ fun Ad() {
         } else {
             Column(
                 modifier = Modifier
-                    .padding(bottom = 10.dp)
+                    .padding(bottom = 20.dp)
                     .clip(
                         RoundedCornerShape(
                             bottomStart = 10.dp,
