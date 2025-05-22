@@ -1,25 +1,27 @@
 package com.woutwerkman.scaffolding
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.woutwerkman.App
+import kotlinconfchallenge25.composeapp.generated.resources.Res
+import kotlinconfchallenge25.composeapp.generated.resources.challenge_image_cool_kodee
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +31,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -55,6 +58,8 @@ fun AppPreview(currentChallenge: Challenge) {
             .fillMaxSize()
             .background(Color.White)
     ) {
+        val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
+            .shareAsState(Duration.ZERO)
         Row(
             modifier = Modifier.weight(0.2f)
                 .height(100.dp)
@@ -86,8 +91,6 @@ fun AppPreview(currentChallenge: Challenge) {
             }
 
             Spacer(modifier = Modifier.width(10.dp))
-            val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
-                .shareAsState(Duration.ZERO)
 
             // Countdown
             Row(
@@ -117,6 +120,15 @@ fun AppPreview(currentChallenge: Challenge) {
                 ChallengeStatusIndicator("Preparing for next Challenge ⏸️", color1, 50.sp)
             }
         }
+        @Composable
+        fun ContentOrAd(timeUntilEndOfChallenge: Duration, currentChallenge: Challenge) {
+            if (timeUntilEndOfChallenge <= currentChallenge.duration) {
+                Content()
+            } else {
+                Ad()
+            }
+        }
+
         Row(
             modifier = Modifier.weight(0.7f)
                 .padding(10.dp)
@@ -130,11 +142,10 @@ fun AppPreview(currentChallenge: Challenge) {
                         .aspectRatio(16 / 9f)
                         .weight(16 / 9f),
                     teamName = if (teamBlue) "Blue" else "Red",
-                    {
-                        Content()
-                    },
-                    color2
-                )
+                    color2,
+                ) {
+                    ContentOrAd(timeUntilEndOfChallenge, currentChallenge)
+                }
             }
             Column(
                 modifier = Modifier
@@ -146,7 +157,7 @@ fun AppPreview(currentChallenge: Challenge) {
                         .aspectRatio(94 / 197f)
                         .fillMaxHeight(),
                 ) {
-                    Content()
+                    ContentOrAd(timeUntilEndOfChallenge, currentChallenge)
                 }
             }
         }
@@ -158,6 +169,62 @@ fun Content() {
     Box(modifier = Modifier.fillMaxSize()) {
         App()
     }
+}
+
+@Composable
+fun Ad() {
+    BoxWithConstraints(
+        modifier = Modifier
+            .padding(5.dp)
+            .clip(RoundedCornerShape(10.dp))
+    ) {
+        if (maxWidth > maxHeight) {
+            Row {
+                internal()
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            bottomStart = 10.dp,
+                            bottomEnd = 10.dp,
+                        )
+                    )
+                ,
+            ) {
+                internal()
+            }
+        }
+    }
+}
+
+@Composable
+fun internal() {
+    Image(painterResource(Res.drawable.challenge_image_cool_kodee), null)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column {
+            Text("""
+                ⚔️ Welcome to the UI Arena! 🎨
+            """.trimIndent(), color = Color.White, fontWeight = Bold
+            )
+            Spacer(Modifier.height(10.dp))
+            Text("""
+                Two teams. One challenge.
+                Build it with Compose Multiplatform.
+                No previews. No mercy.
+                Ten minutes to glory.
+            """.trimIndent(), color = Color.White)
+
+        }
+    }
+
 }
 
 @Composable

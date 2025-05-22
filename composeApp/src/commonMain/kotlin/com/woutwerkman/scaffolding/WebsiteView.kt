@@ -23,8 +23,8 @@ import org.jetbrains.compose.resources.painterResource
 fun WebsiteView(
     modifier: Modifier,
     teamName: String,
+    bgColor: Color = Color(0.8f, 0.8f, 0.8f),
     content: @Composable () -> Unit,
-    bgColor: Color = Color(0.8f, 0.8f, 0.8f)
 ) {
     val tabColor = Color.White
     Box(modifier = Modifier

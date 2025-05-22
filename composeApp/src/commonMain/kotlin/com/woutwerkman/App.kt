@@ -19,10 +19,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalResourceApi::class, ExperimentalLayoutApi::class)
 fun App() {
     MaterialTheme {
-        FlowRow(modifier = Modifier.padding(8.dp)) {
-            Image(painterResource(Res.drawable.kodee_waving), null)
-            Text(text = "Hello World!", modifier = Modifier.align(Alignment.CenterVertically))
-        }
+
     }
 }
 
