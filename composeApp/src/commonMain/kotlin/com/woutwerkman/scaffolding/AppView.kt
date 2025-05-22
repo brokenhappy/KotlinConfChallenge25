@@ -210,17 +210,25 @@ fun internal() {
         contentAlignment = Alignment.Center,
     ) {
         Column {
-            Text("""
-                ⚔️ Welcome to the UI Arena! 🎨
-            """.trimIndent(), color = Color.White, fontWeight = Bold
+            Text(
+                """
+                    ⚔️ Welcome to the UI Arena! 🎨
+                """.trimIndent(),
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = Bold,
             )
             Spacer(Modifier.height(10.dp))
-            Text("""
-                Two teams. One challenge.
-                Build it with Compose Multiplatform.
-                No previews. No mercy.
-                Ten minutes to glory.
-            """.trimIndent(), color = Color.White)
+            Text(
+                text = """
+                    Two teams. One challenge.
+                    Build it with Compose Multiplatform.
+                    No previews. No mercy.
+                    Ten minutes to glory.
+                """.trimIndent(),
+                fontSize = 18.sp,
+                color = Color.White,
+            )
 
         }
     }
