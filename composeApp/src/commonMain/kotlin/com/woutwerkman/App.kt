@@ -16,7 +16,14 @@ import org.jetbrains.compose.resources.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-@OptIn(ExperimentalResourceApi::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalResourceApi::class,
+    ExperimentalLayoutApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeApi::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalTextApi::class,
+)
 fun App() {
     MaterialTheme {
 
