@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -180,7 +179,7 @@ fun Ad() {
     ) {
         if (maxWidth > maxHeight) {
             Row {
-                internal()
+                InternalAd(isWide = false)
             }
         } else {
             Column(
@@ -194,14 +193,14 @@ fun Ad() {
                     )
                 ,
             ) {
-                internal()
+                InternalAd(isWide = true)
             }
         }
     }
 }
 
 @Composable
-fun internal() {
+fun InternalAd(isWide: Boolean) {
     Image(painterResource(Res.drawable.challenge_image_cool_kodee), null)
     Box(
         modifier = Modifier
@@ -215,7 +214,7 @@ fun internal() {
                     ⚔️ Welcome to the UI Arena! 🎨
                 """.trimIndent(),
                 color = Color.White,
-                fontSize = 18.sp,
+                fontSize = if (isWide) 30.sp else 18.sp,
                 fontWeight = Bold,
             )
             Spacer(Modifier.height(10.dp))
@@ -226,7 +225,7 @@ fun internal() {
                     No previews. No mercy.
                     Ten minutes to glory.
                 """.trimIndent(),
-                fontSize = 18.sp,
+                fontSize = if (isWide) 30.sp else 18.sp,
                 color = Color.White,
             )
 
