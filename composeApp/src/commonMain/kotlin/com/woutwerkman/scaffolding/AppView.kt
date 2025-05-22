@@ -58,7 +58,7 @@ fun AppPreview(currentChallenge: Challenge) {
             .background(Color.White)
     ) {
         val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
-            .shareAsState(Duration.ZERO)
+            .shareAsState(Duration.ZERO, key = currentChallenge.endTime)
         Row(
             modifier = Modifier.weight(0.2f)
                 .height(100.dp)
@@ -392,10 +392,11 @@ private fun TwoSevenSegmentDigits(
 @Composable
 fun <T> Flow<T>.shareAsState(
     initial: T,
+    key: Any?,
     scope: CoroutineScope = rememberCoroutineScope(),
     started: SharingStarted = SharingStarted.Eagerly,
     replay: Int = 1
-): androidx.compose.runtime.State<T> = remember { shareIn(scope, started, replay) }.collectAsState(initial)
+): State<T> = remember { shareIn(scope, started, replay) }.collectAsState(initial)
 
 
 private operator fun Dp.times(rhs: Double): Dp = (value * rhs).dp
