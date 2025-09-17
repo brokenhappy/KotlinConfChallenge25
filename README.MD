@@ -35,7 +35,7 @@ Imagine the following scenario:
  - Attached monitor is on the left side
 
 If we want to put the window in full screen on the attached monitor,
-then we use the following arguments: jvmRun --args="-1920.0 0.0 1920.0 1080.0" -DmainClass=HotRunKt
+then we use the following arguments: `jvmRun --args="-1920.0 0.0 1920.0 1080.0" -DmainClass=HotRunKt`
 
 Having this prepared makes it much easier to restart the sessions.
 
