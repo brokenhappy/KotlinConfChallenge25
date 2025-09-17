@@ -1,27 +1,47 @@
-# Compose Multiplatform Application
+# KotlinConf Challenge
 
-## Before running!
- - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
- - install JDK 17 or higher on your machine
- - add `local.properties` file to the project root and set a path to Android SDK there
+## Setup
 
-### Android
-To run the application on android device/emulator:  
- - open project in Android Studio and run imported android run configuration
+### Plugin and Google Sheet configuration setup.
 
-To build the application bundle:
- - run `./gradlew :composeApp:assembleDebug`
- - find `.apk` file in `composeApp/build/outputs/apk/debug/composeApp-debug.apk`
-Run android UI tests on the connected device: `./gradlew :composeApp:connectedDebugAndroidTest`
+Before you do anything here,
+follow [the steps laid out in the plugin's repository](https://github.com/brokenhappy/KotlinConfChallengePlugin?tab=readme-ov-file#setup).
 
-### Desktop
-Run the desktop application: `./gradlew :composeApp:run`
-Run the desktop **hot reload** application: `./gradlew :composeApp:jvmRunHot`)
-Run desktop UI tests: `./gradlew :composeApp:jvmTest`
+### Prepare the challenge machine
 
-### iOS
-To run the application on iPhone device/simulator:
- - Open `iosApp/iosApp.xcproject` in Xcode and run standard configuration
- - Or use [Kotlin Multiplatform Mobile plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile) for Android Studio
-Run iOS simulator UI tests: `./gradlew :composeApp:iosSimulatorArm64Test`
+#### Google Sheet ID setup
 
+Now that the Google Sheet configuration prepared and **it is public**, we can now link it on the challenge machine.
+To do that, we will download the file into the "local file cache",
+which is a local copy of the configuration defined in the Google sheet.
+AKA "the file that is shared between the runtime and the plugin". By default this is 
+`~/Documents/filesForKotlinConfChallenge25/downloadCache.json`.
+
+To set this up, one must define the Google Sheet ID.
+The ID can be found as part of the URL of your Google Sheet (`https://docs.google.com/spreadsheets/d/<SheetId>/blabla`).
+This ID should be set in [Settings > KotlinConf Challenge](jetbrains://idea/settings?name=Tools--KotlinConf+Challenge).
+
+Now you can press `Ctrl + Opt + Cmd + R` to invoke the `Refetch Challenges` task to update the local cache file.
+This should also happen automatically every minute.
+
+#### Change the default position for Compose Hot Reload (CHR) session.
+
+The hotRun.kt file's main function takes 4 **float** arguments to determine the
+starting position of the window.
+This should be configured according to the display setup and preferences.
+Imagine the following scenario:
+ - The main screen is 1920x1080
+ - Attached monitor is 1920x1080
+ - Attached monitor is on the left side
+
+If we want to put the window in full screen on the attached monitor,
+then we use the following arguments: jvmRun --args="-1920.0 0.0 1920.0 1080.0" -DmainClass=HotRunKt
+
+Having this prepared makes it much easier to restart the sessions.
+
+#### Change the team color
+
+Change the `com.woutwerkman.scaffolding.teamBlue` to set whether is the red or the blue player.
+This changes the color and some UI elements. Only visible to the audience.
+
+**And then you're ready to go for it. Have fun! <3**
