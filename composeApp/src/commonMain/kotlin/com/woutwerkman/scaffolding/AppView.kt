@@ -40,10 +40,11 @@ import kotlin.time.times
 @Serializable
 data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl: String)
 
+private const val teamBlue = false
+
 @Composable
 @Preview
 fun AppPreview(currentChallenge: Challenge) {
-    val teamBlue = false
     val color1 = when (teamBlue) {
         true -> Color(0xff182d8c)
         else -> Color(0xff9c0c0e)
