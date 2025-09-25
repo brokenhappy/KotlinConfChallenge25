@@ -56,12 +56,12 @@ fun main(args: Array<String>) = application {
         onCloseRequest = ::exitApplication,
         alwaysOnTop = true,
     ) {
-        orchestration.invokeWhenReceived<ReloadClassesResult> { result ->
-            if (!result.isSuccess) {
-                startSameProgramWithWindowState(windowState)
-                exitProcess(0)
-            }
-        }
+//        orchestration.invokeWhenReceived<ReloadClassesResult> { result ->
+//            if (!result.isSuccess) {
+//                startSameProgramWithWindowState(windowState)
+//                exitProcess(0)
+//            }
+//        }
         val challenges: List<Challenge>? by produceState(null) {
             val path = System.getenv("KotlinConfChallengeDataFile")
                 ?: "${System.getProperty("user.home")}/Documents/filesForKotlinConfChallenge25/downloadCache.json".also {
