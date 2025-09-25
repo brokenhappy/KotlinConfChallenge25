@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
     alias(libs.plugins.hotReload)
-    kotlin("plugin.serialization") version "2.1.21"
+    kotlin("plugin.serialization") version "2.2.20"
 }
 
 kotlin {
@@ -61,9 +61,10 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-agent:1.0.0-alpha10")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-orchestration:1.0.0-alpha10")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-core:1.0.0-alpha10")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-agent:1.0.0-beta08")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-orchestration:1.0.0-beta08")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-devtools-api:1.0.0-beta08")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-core:1.0.0-beta08")
         }
 
     }

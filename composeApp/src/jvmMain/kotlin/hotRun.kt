@@ -28,8 +28,9 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.reload.agent.orchestration
+import org.jetbrains.compose.reload.core.invokeOnValue
+import org.jetbrains.compose.reload.core.withType
 import org.jetbrains.compose.reload.orchestration.OrchestrationMessage.ReloadClassesResult
-import org.jetbrains.compose.reload.orchestration.invokeWhenReceived
 import java.util.Base64
 import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.milliseconds
@@ -56,12 +57,12 @@ fun main(args: Array<String>) = application {
         onCloseRequest = ::exitApplication,
         alwaysOnTop = true,
     ) {
-//        orchestration.invokeWhenReceived<ReloadClassesResult> { result ->
-//            if (!result.isSuccess) {
-//                startSameProgramWithWindowState(windowState)
-//                exitProcess(0)
-//            }
-//        }
+        orchestration.messages.withType<ReloadClassesResult>().invokeOnValue{ result ->
+            if (!result.isSuccess) {
+                startSameProgramWithWindowState(windowState)
+                exitProcess(0)
+            }
+        }
         val challenges: List<Challenge>? by produceState(null) {
             val path = System.getenv("KotlinConfChallengeDataFile")
                 ?: "${System.getProperty("user.home")}/Documents/filesForKotlinConfChallenge25/downloadCache.json".also {
