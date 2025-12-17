@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import kotlinconfchallenge25.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.*
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @OptIn(
