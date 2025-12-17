@@ -31,7 +31,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
@@ -43,7 +42,6 @@ data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl:
 private const val teamBlue = false
 
 @Composable
-@Preview
 fun AppPreview(currentChallenge: Challenge) {
     val color1 = when (teamBlue) {
         true -> Color(0xff182d8c)
