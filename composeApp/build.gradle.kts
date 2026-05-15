@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
     alias(libs.plugins.hotReload)
-    kotlin("plugin.serialization") version "2.2.20"
+    kotlin("plugin.serialization") version "2.3.21"
 }
 
 kotlin {
@@ -23,7 +23,6 @@ kotlin {
     jvm()
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -40,8 +39,8 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(libs.kotlinx.coroutines.core)
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
         }
 
         commonTest.dependencies {
@@ -59,10 +58,10 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-agent:1.0.0-beta08")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-orchestration:1.0.0-beta08")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-devtools-api:1.0.0-beta08")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-core:1.0.0-beta08")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-agent:1.1.1")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-orchestration:1.1.1")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-devtools-api:1.1.1")
+            implementation("org.jetbrains.compose.hot-reload:hot-reload-core:1.1.1")
         }
 
     }
@@ -70,11 +69,11 @@ kotlin {
 
 android {
     namespace = "com.woutwerkman"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 35
+        minSdk = 23
+        targetSdk = 36
 
         applicationId = "com.woutwerkman.androidApp"
         versionCode = 1

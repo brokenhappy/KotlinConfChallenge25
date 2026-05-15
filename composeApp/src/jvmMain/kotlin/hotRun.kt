@@ -17,8 +17,8 @@ import com.woutwerkman.scaffolding.AppPreview
 import com.woutwerkman.scaffolding.Challenge
 import com.woutwerkman.scaffolding.fileContentOf
 import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
