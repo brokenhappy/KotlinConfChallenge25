@@ -10,12 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -144,9 +144,14 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
     val teamVotes = if (isBlueTeam) voteStatus?.number_of_blue_votes ?: 0
         else voteStatus?.number_of_red_votes ?: 0
 
-    val bounceScale = remember(teamVotes) { Animatable(if (teamVotes > 0) 1.25f else 1f) }
+    val bounceScale = remember { Animatable(1f) }
     LaunchedEffect(teamVotes) {
         if (teamVotes > 0) {
+            bounceScale.snapTo(1f)
+            bounceScale.animateTo(
+                targetValue = 1.25f,
+                animationSpec = tween(80, easing = FastOutSlowInEasing),
+            )
             bounceScale.animateTo(
                 targetValue = 1f,
                 animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
@@ -174,7 +179,7 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
 
             Spacer(Modifier.height(16.dp))
 
-            VoteCounterAnimated(teamVotes, teamColor, bounceScale.value)
+            VoteCounterAnimated(teamVotes, teamColor, bounceScale)
 
             Spacer(Modifier.height(16.dp))
 
@@ -208,7 +213,7 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
 }
 
 @Composable
-private fun VoteCounterAnimated(count: Int, teamColor: Color, bounceScale: Float) {
+private fun VoteCounterAnimated(count: Int, teamColor: Color, bounceScale: Animatable<Float, *>) {
     val infiniteTransition = rememberInfiniteTransition()
     val glowAlpha by infiniteTransition.animateFloat(
         initialValue = 0.3f,
@@ -221,7 +226,10 @@ private fun VoteCounterAnimated(count: Int, teamColor: Color, bounceScale: Float
 
     Box(
         modifier = Modifier
-            .scale(bounceScale)
+            .graphicsLayer {
+                scaleX = bounceScale.value
+                scaleY = bounceScale.value
+            }
             .clip(RoundedCornerShape(24.dp))
             .background(
                 Brush.radialGradient(
