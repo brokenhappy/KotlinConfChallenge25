@@ -144,14 +144,9 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
     val teamVotes = if (isBlueTeam) voteStatus?.number_of_blue_votes ?: 0
         else voteStatus?.number_of_red_votes ?: 0
 
-    val bounceScale = remember { Animatable(1f) }
+    val bounceScale = remember(teamVotes) { Animatable(if (teamVotes > 0) 1.25f else 1f) }
     LaunchedEffect(teamVotes) {
         if (teamVotes > 0) {
-            bounceScale.snapTo(1f)
-            bounceScale.animateTo(
-                targetValue = 1.25f,
-                animationSpec = tween(80, easing = FastOutSlowInEasing),
-            )
             bounceScale.animateTo(
                 targetValue = 1f,
                 animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
