@@ -132,52 +132,58 @@ fun AppPreview(currentChallenge: Challenge, voteStatus: VoteStatus? = null) {
             }
         }
 
+        val showOverlay = phase == ChallengePhase.SUSPENSE || phase == ChallengePhase.VOTING
+        val blurRadius = if (showOverlay) 48.dp else 0.dp
+
         @Composable
-        fun PhaseContent() {
+        fun PreviewContent() {
             when (phase) {
                 ChallengePhase.PREPARING -> Ad()
-                ChallengePhase.RUNNING -> Content()
-                ChallengePhase.SUSPENSE -> Box(Modifier.fillMaxSize()) {
-                    Box(Modifier.fillMaxSize().blur(24.dp)) { Content() }
-                    SuspenseOverlay(color2, color1)
-                }
-                ChallengePhase.VOTING -> Box(Modifier.fillMaxSize()) {
-                    Box(Modifier.fillMaxSize().blur(24.dp)) { Content() }
-                    VoteResultsOverlay(voteStatus, teamBlue)
-                }
+                else -> Content()
             }
         }
 
-        Row(
-            modifier = Modifier.weight(0.7f)
-                .padding(10.dp)
-        ) {
-            Column(
+        Box(modifier = Modifier.weight(0.7f)) {
+            Row(
                 modifier = Modifier
-                    .weight(16 / 9f)
+                    .fillMaxSize()
+                    .then(if (showOverlay) Modifier.blur(blurRadius) else Modifier)
+                    .padding(10.dp)
             ) {
-                WebsiteView(
+                Column(
                     modifier = Modifier
-                        .aspectRatio(16 / 9f)
-                        .weight(16 / 9f),
-                    teamName = if (teamBlue) "Blue" else "Red",
-                    color2,
+                        .weight(16 / 9f)
                 ) {
-                    PhaseContent()
+                    WebsiteView(
+                        modifier = Modifier
+                            .aspectRatio(16 / 9f)
+                            .weight(16 / 9f),
+                        teamName = if (teamBlue) "Blue" else "Red",
+                        color2,
+                    ) {
+                        PreviewContent()
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(94 / 197f),
+                ) {
+                    PhoneView(
+                        modifier = Modifier
+                            .weight(3f)
+                            .aspectRatio(94 / 197f)
+                            .fillMaxHeight(),
+                    ) {
+                        PreviewContent()
+                    }
                 }
             }
-            Column(
-                modifier = Modifier
-                    .weight(94 / 197f),
-            ) {
-                PhoneView(
-                    modifier = Modifier
-                        .weight(3f)
-                        .aspectRatio(94 / 197f)
-                        .fillMaxHeight(),
-                ) {
-                    PhaseContent()
-                }
+
+            if (phase == ChallengePhase.SUSPENSE) {
+                SuspenseOverlay(color2, color1)
+            }
+            if (phase == ChallengePhase.VOTING) {
+                VoteResultsOverlay(voteStatus, teamBlue)
             }
         }
     }
