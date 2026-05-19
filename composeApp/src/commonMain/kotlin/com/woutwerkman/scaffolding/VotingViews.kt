@@ -1,7 +1,7 @@
 package com.woutwerkman.scaffolding
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,9 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -20,6 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinconfchallenge25.composeapp.generated.resources.Res
+import kotlinconfchallenge25.composeapp.generated.resources.voting_qr_code
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SuspenseOverlay(teamColor: Color, teamDarkColor: Color) {
@@ -37,7 +37,7 @@ fun SuspenseOverlay(teamColor: Color, teamDarkColor: Color) {
 
             Spacer(Modifier.height(32.dp))
 
-            QrCodePlaceholder()
+            VotingQrCode()
 
             Spacer(Modifier.height(24.dp))
 
@@ -101,40 +101,14 @@ private fun PulsingText(accentColor: Color) {
 }
 
 @Composable
-private fun QrCodePlaceholder() {
-    Box(
+private fun VotingQrCode() {
+    Image(
+        painter = painterResource(Res.drawable.voting_qr_code),
+        contentDescription = "Scan to vote",
         modifier = Modifier
             .size(200.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
-            .padding(12.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val cellSize = size.width / 7
-            val pattern = listOf(
-                listOf(1,1,1,0,1,1,1),
-                listOf(1,0,1,0,1,0,1),
-                listOf(1,1,1,0,1,1,1),
-                listOf(0,0,0,1,0,0,0),
-                listOf(1,1,1,0,1,1,1),
-                listOf(1,0,1,0,1,0,1),
-                listOf(1,1,1,0,1,1,1),
-            )
-            for (row in pattern.indices) {
-                for (col in pattern[row].indices) {
-                    if (pattern[row][col] == 1) {
-                        drawRoundRect(
-                            color = Color.Black,
-                            topLeft = Offset(col * cellSize, row * cellSize),
-                            size = Size(cellSize - 2, cellSize - 2),
-                            cornerRadius = CornerRadius(2f, 2f),
-                        )
-                    }
-                }
-            }
-        }
-    }
+            .clip(RoundedCornerShape(16.dp)),
+    )
 }
 
 @Composable

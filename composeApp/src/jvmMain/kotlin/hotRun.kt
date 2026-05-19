@@ -115,9 +115,8 @@ fun main(args: Array<String>) = application {
         }
 
 
-        val voteServerUrl = System.getenv("VOTE_SERVER_URL") ?: "ws://169.254.145.215:8080"
         val voteStatus by produceState<VoteStatus?>(null) {
-            voteStatusFlow(voteServerUrl).collect { value = it }
+            voteStatusFlow().collect { value = it }
         }
 
         AppPreview(currentChallenge, voteStatus)

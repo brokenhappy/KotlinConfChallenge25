@@ -14,8 +14,7 @@ import kotlin.time.Duration.Companion.seconds
 
 private val json = Json { ignoreUnknownKeys = true }
 
-fun voteStatusFlow(serverUrl: String = "ws://169.254.145.215:8080"): Flow<VoteStatus> = callbackFlow {
-    val wsUrl = "$serverUrl/ws/notSoHiddenUrlBecauseItWillBeInOpenSourceRepo/status"
+fun voteStatusFlow(wsUrl: String = "wss://voting-app.labs.jb.gg/ws/live-vote-feed/status"): Flow<VoteStatus> = callbackFlow {
     val client = HttpClient.newHttpClient()
 
     fun connect() {
