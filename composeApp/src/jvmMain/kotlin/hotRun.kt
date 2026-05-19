@@ -1,6 +1,7 @@
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
+import org.jetbrains.compose.reload.DelicateHotReloadApi
 import org.jetbrains.compose.reload.agent.orchestration
 import org.jetbrains.compose.reload.core.invokeOnValue
 import org.jetbrains.compose.reload.core.withType
@@ -57,10 +59,13 @@ fun main(args: Array<String>) = application {
         onCloseRequest = ::exitApplication,
         alwaysOnTop = true,
     ) {
-        orchestration.messages.withType<ReloadClassesResult>().invokeOnValue{ result ->
-            if (!result.isSuccess) {
-                startSameProgramWithWindowState(windowState)
-                exitProcess(0)
+        LaunchedEffect(Unit) {
+            @OptIn(DelicateHotReloadApi::class)
+            orchestration.messages.withType<ReloadClassesResult>().collect { result ->
+                if (!result.isSuccess) {
+                    startSameProgramWithWindowState(windowState)
+                    exitProcess(0)
+                }
             }
         }
         val challenges: List<Challenge>? by produceState(null) {
