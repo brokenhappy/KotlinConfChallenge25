@@ -16,7 +16,9 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.woutwerkman.scaffolding.AppPreview
 import com.woutwerkman.scaffolding.Challenge
+import com.woutwerkman.scaffolding.VoteStatus
 import com.woutwerkman.scaffolding.fileContentOf
+import com.woutwerkman.scaffolding.voteStatusFlow
 import kotlinx.coroutines.delay
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -113,7 +115,12 @@ fun main(args: Array<String>) = application {
         }
 
 
-        AppPreview(currentChallenge)
+        val voteServerUrl = System.getenv("VOTE_SERVER_URL") ?: "ws://169.254.145.215:8080"
+        val voteStatus by produceState<VoteStatus?>(null) {
+            voteStatusFlow(voteServerUrl).collect { value = it }
+        }
+
+        AppPreview(currentChallenge, voteStatus)
     }
 }
 

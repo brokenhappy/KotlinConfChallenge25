@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -33,6 +34,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.times
 
@@ -41,8 +43,10 @@ data class Challenge(val endTime: Instant, val duration: Duration, val imageUrl:
 
 private const val teamBlue = false
 
+enum class ChallengePhase { PREPARING, RUNNING, SUSPENSE, VOTING }
+
 @Composable
-fun AppPreview(currentChallenge: Challenge) {
+fun AppPreview(currentChallenge: Challenge, voteStatus: VoteStatus? = null) {
     val color1 = when (teamBlue) {
         true -> Color(0xff182d8c)
         else -> Color(0xff9c0c0e)
@@ -58,6 +62,14 @@ fun AppPreview(currentChallenge: Challenge) {
     ) {
         val timeUntilEndOfChallenge by countdownTo(currentChallenge.endTime, interval = 10.milliseconds)
             .shareAsState(Duration.ZERO, key = currentChallenge.endTime)
+
+        val phase = when {
+            timeUntilEndOfChallenge > currentChallenge.duration -> ChallengePhase.PREPARING
+            timeUntilEndOfChallenge > 2.minutes -> ChallengePhase.RUNNING
+            timeUntilEndOfChallenge > Duration.ZERO -> ChallengePhase.SUSPENSE
+            else -> ChallengePhase.VOTING
+        }
+
         Row(
             modifier = Modifier.weight(0.2f)
                 .height(100.dp)
@@ -112,18 +124,27 @@ fun AppPreview(currentChallenge: Challenge) {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            if (timeUntilEndOfChallenge <= currentChallenge.duration) {
-                ChallengeStatusIndicator("Challenge running", color1, 60.sp)
-            } else {
-                ChallengeStatusIndicator("Preparing for next Challenge ⏸️", color1, 50.sp)
+            when (phase) {
+                ChallengePhase.PREPARING -> ChallengeStatusIndicator("Preparing for next Challenge ⏸️", color1, 50.sp)
+                ChallengePhase.RUNNING -> ChallengeStatusIndicator("Challenge running", color1, 60.sp)
+                ChallengePhase.SUSPENSE -> ChallengeStatusIndicator("Time almost up! Get ready to vote!", color1, 40.sp)
+                ChallengePhase.VOTING -> ChallengeStatusIndicator("Voting time!", color1, 60.sp)
             }
         }
+
         @Composable
-        fun ContentOrAd(timeUntilEndOfChallenge: Duration, currentChallenge: Challenge) {
-            if (timeUntilEndOfChallenge <= currentChallenge.duration) {
-                Content()
-            } else {
-                Ad()
+        fun PhaseContent() {
+            when (phase) {
+                ChallengePhase.PREPARING -> Ad()
+                ChallengePhase.RUNNING -> Content()
+                ChallengePhase.SUSPENSE -> Box(Modifier.fillMaxSize()) {
+                    Box(Modifier.fillMaxSize().blur(24.dp)) { Content() }
+                    SuspenseOverlay(color2, color1)
+                }
+                ChallengePhase.VOTING -> Box(Modifier.fillMaxSize()) {
+                    Box(Modifier.fillMaxSize().blur(24.dp)) { Content() }
+                    VoteResultsOverlay(voteStatus, teamBlue)
+                }
             }
         }
 
@@ -142,7 +163,7 @@ fun AppPreview(currentChallenge: Challenge) {
                     teamName = if (teamBlue) "Blue" else "Red",
                     color2,
                 ) {
-                    ContentOrAd(timeUntilEndOfChallenge, currentChallenge)
+                    PhaseContent()
                 }
             }
             Column(
@@ -155,7 +176,7 @@ fun AppPreview(currentChallenge: Challenge) {
                         .aspectRatio(94 / 197f)
                         .fillMaxHeight(),
                 ) {
-                    ContentOrAd(timeUntilEndOfChallenge, currentChallenge)
+                    PhaseContent()
                 }
             }
         }
