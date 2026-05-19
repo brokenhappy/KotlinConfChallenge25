@@ -167,21 +167,12 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
                 ),
             )
 
-            if (voteStatus?.session_active == true) {
-                Text(
-                    text = "Voting is LIVE",
-                    color = Color.Green.copy(alpha = dotAlpha),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            } else {
-                Text(
-                    text = "Votes",
-                    color = teamColor.copy(alpha = 0.7f),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Medium,
-                )
-            }
+            Text(
+                text = "Votes",
+                color = teamColor.copy(alpha = 0.7f),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Medium,
+            )
         }
     }
 }
