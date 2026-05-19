@@ -144,17 +144,13 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
     val teamVotes = if (isBlueTeam) voteStatus?.number_of_blue_votes ?: 0
         else voteStatus?.number_of_red_votes ?: 0
 
-    val animatedVotes by animateIntAsState(
-        targetValue = teamVotes,
-        animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
-    )
-
     val bounceScale = remember { Animatable(1f) }
     LaunchedEffect(teamVotes) {
         if (teamVotes > 0) {
+            bounceScale.snapTo(1f)
             bounceScale.animateTo(
                 targetValue = 1.25f,
-                animationSpec = tween(100, easing = FastOutSlowInEasing),
+                animationSpec = tween(80, easing = FastOutSlowInEasing),
             )
             bounceScale.animateTo(
                 targetValue = 1f,
@@ -183,7 +179,7 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
 
             Spacer(Modifier.height(16.dp))
 
-            VoteCounterAnimated(animatedVotes, teamColor, bounceScale.value)
+            VoteCounterAnimated(teamVotes, teamColor, bounceScale.value)
 
             Spacer(Modifier.height(16.dp))
 
