@@ -227,37 +227,40 @@ fun Ad() {
 
 @Composable
 fun InternalAd(isWide: Boolean) {
-    Image(painterResource(Res.drawable.challenge_image_cool_kodee), null)
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black),
-        contentAlignment = Alignment.Center,
+            .background(Color.Black)
     ) {
-        Column {
-            Text(
-                """
+        Image(painterResource(Res.drawable.challenge_image_cool_kodee), null)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column {
+                Text(
+                    """
                     ⚔️ Welcome to the UI Arena! 🎨
                 """.trimIndent(),
-                color = Color.White,
-                fontSize = if (isWide) 30.sp else 18.sp,
-                fontWeight = Bold,
-            )
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = """
+                    color = Color.White,
+                    fontSize = if (isWide) 30.sp else 18.sp,
+                    fontWeight = Bold,
+                )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = """
                     Two teams. One challenge.
                     Build it with Compose Multiplatform.
                     No previews. No mercy.
                     Ten minutes to glory.
                 """.trimIndent(),
-                fontSize = if (isWide) 30.sp else 18.sp,
-                color = Color.White,
-            )
+                    fontSize = if (isWide) 30.sp else 18.sp,
+                    color = Color.White,
+                )
 
+            }
         }
     }
-
 }
 
 @Composable
