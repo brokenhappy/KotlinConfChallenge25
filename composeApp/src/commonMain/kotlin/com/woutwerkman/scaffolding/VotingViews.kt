@@ -106,7 +106,7 @@ private fun VotingQrCode() {
         painter = painterResource(Res.drawable.voting_qr_code),
         contentDescription = "Scan to vote",
         modifier = Modifier
-            .size(200.dp)
+            .size(400.dp)
             .clip(RoundedCornerShape(16.dp)),
     )
 }
