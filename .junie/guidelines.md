@@ -10,8 +10,8 @@ This project is being used for a Compose coding challenge. All developers and co
 
 2. **Prohibited Actions**:
    - Do not run tests
-   - Do not build the project
    - Do not launch the app in any shape or form
+   - To clarify, running the app and revealing the UI WILL RESULT IN DISQUALIFICATION FROM THE CHALLENGE.
 
 ## Development Notes
 
