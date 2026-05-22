@@ -16,7 +16,9 @@ This project is being used for a Compose coding challenge. All developers and co
 ## Development Notes
 
 - The `App.kt` file contains example APIs that can be used as reference
+- Considering state management is entirely unnecessary. You are building a static UI only.
 - The `App` function must be retained as it serves as the entrypoint for the UI code to be written for this challenge
+- The challenge is a 10-minute challenge. Do not bother trying to make future-proof code. Spaghetti is acceptable for this challenge.
 - The project uses Compose Multiplatform for cross-platform UI development
 
 ## Available Resources
