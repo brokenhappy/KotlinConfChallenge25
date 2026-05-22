@@ -173,6 +173,20 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Medium,
             )
+
+            Spacer(Modifier.height(24.dp))
+
+            VotingQrCode()
+
+            Spacer(Modifier.height(12.dp))
+
+            Text(
+                text = "Scan to vote!",
+                color = teamColor.copy(alpha = 0.8f),
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
