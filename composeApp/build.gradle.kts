@@ -39,8 +39,8 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(libs.kotlinx.coroutines.core)
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.json)
         }
 
         commonTest.dependencies {
@@ -58,10 +58,10 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-agent:1.1.1")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-orchestration:1.1.1")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-devtools-api:1.1.1")
-            implementation("org.jetbrains.compose.hot-reload:hot-reload-core:1.1.1")
+            implementation(libs.hot.reload.agent)
+            implementation(libs.hot.reload.orchestration)
+            implementation(libs.hot.reload.devtools.api)
+            implementation(libs.hot.reload.core)
         }
 
     }

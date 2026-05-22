@@ -240,8 +240,8 @@ fun InternalAd(isWide: Boolean) {
             Column {
                 Text(
                     """
-                    ⚔️ Welcome to the UI Arena! 🎨
-                """.trimIndent(),
+                        ⚔️ Welcome to the UI Arena! 🎨
+                    """.trimIndent(),
                     color = Color.White,
                     fontSize = if (isWide) 30.sp else 18.sp,
                     fontWeight = Bold,
@@ -249,11 +249,11 @@ fun InternalAd(isWide: Boolean) {
                 Spacer(Modifier.height(10.dp))
                 Text(
                     text = """
-                    Two teams. One challenge.
-                    Build it with Compose Multiplatform.
-                    No previews. No mercy.
-                    Ten minutes to glory.
-                """.trimIndent(),
+                        Two teams. One challenge.
+                        Build it with Compose Multiplatform.
+                        No previews. No mercy.
+                        Ten minutes to glory.
+                    """.trimIndent(),
                     fontSize = if (isWide) 30.sp else 18.sp,
                     color = Color.White,
                 )
