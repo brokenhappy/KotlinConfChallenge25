@@ -157,36 +157,7 @@ fun VoteResultsOverlay(voteStatus: VoteStatus?, isBlueTeam: Boolean) {
 
             Spacer(Modifier.height(16.dp))
 
-            val infiniteTransition = rememberInfiniteTransition()
-            val dotAlpha by infiniteTransition.animateFloat(
-                initialValue = 0.3f,
-                targetValue = 1f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(800),
-                    repeatMode = RepeatMode.Reverse,
-                ),
-            )
-
-            Text(
-                text = "Votes",
-                color = teamColor.copy(alpha = 0.7f),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Medium,
-            )
-
-            Spacer(Modifier.height(24.dp))
-
             VotingQrCode()
-
-            Spacer(Modifier.height(12.dp))
-
-            Text(
-                text = "Scan to vote!",
-                color = teamColor.copy(alpha = 0.8f),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center,
-            )
         }
     }
 }
