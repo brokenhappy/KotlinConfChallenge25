@@ -23,7 +23,6 @@ import androidx.compose.material.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,13 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -68,6 +64,7 @@ suspend fun main() {
     awaitApplication {
         Window(onCloseRequest = { exitApplication() }, title = "UI fiddles", alwaysOnTop = true) {
             Column {
+                Spacer(modifier = Modifier.height(30.dp))
                 var rootValue by remember { mutableStateOf<Int?>(0) }
                 RenderTree(tree, rootValue, onValueChange = { rootValue = it })
             }
@@ -150,8 +147,6 @@ fun AnimatedQuadStateCheckbox(
     }
 
 
-    var widthPx by remember { mutableFloatStateOf(1f) }
-    var location by remember { mutableStateOf(Offset.Zero) }
     val scope = rememberCoroutineScope()
 
 
@@ -213,48 +208,38 @@ fun AnimatedQuadStateCheckbox(
                 }
             }
         }
-        Row(modifier = Modifier.width(48.dp)) {
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Spacer(Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .onGloballyPositioned { coordinates ->
-                            widthPx = coordinates.size.width.toFloat()
-                            location = coordinates.positionInRoot()
-                        }
-                        .pointerInput(Unit) {
-                            detectTapGestures {
-                                onClick()
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        onClick()
+                    }
+                }
+                .pointerInput(Unit) {
+                    val offsetPx = 16.dp.toPx()
+                    val checkboxWidthPx = 18.dp.toPx()
+                    detectDragGestures(
+                        onDragStart = { offset ->
+                            overriddenByDragValue = ((offset.x - offsetPx) / checkboxWidthPx).coerceIn(0f, 1f)
+                        },
+                        onDrag = { change, _ ->
+                            overriddenByDragValue = ((change.position.x - offsetPx) / checkboxWidthPx).coerceIn(0f, 1f)
+                        },
+                        onDragEnd = {
+                            overriddenByDragValue?.let { newlyDecidedValue ->
+                                val newlyDecidedInt = (newlyDecidedValue * 3).roundToInt()
+                                onValueChange(newlyDecidedInt)
+                                scope.launch {
+                                    anim.snapTo(newlyDecidedValue)
+                                    overriddenByDragValue = null
+                                    anim.animateTo(newlyDecidedInt / 3f)
+                                }
                             }
                         }
-                        .pointerInput(Unit) {
-                            detectDragGestures(
-                                onDragStart = { offset ->
-                                    val ratio = (offset.x / widthPx).coerceIn(0f, 1f)
-                                    overriddenByDragValue = ratio
-                                },
-                                onDrag = { change, _ ->
-                                    val ratio = (change.position.x / widthPx).coerceIn(0f, 1f)
-                                    overriddenByDragValue = ratio
-                                },
-                                onDragEnd = {
-                                    overriddenByDragValue?.let { newlyDecidedValue ->
-                                        val newlyDecidedInt = (newlyDecidedValue * 3).roundToInt()
-                                        onValueChange(newlyDecidedInt)
-                                        scope.launch {
-                                            anim.snapTo(newlyDecidedValue)
-                                            overriddenByDragValue = null
-                                            anim.animateTo(newlyDecidedInt / 3f)
-                                        }
-                                    }
-                                }
-                            )
-                        }
-                )
-            }
-        }
+                    )
+                }
+        )
     }
 }
 
