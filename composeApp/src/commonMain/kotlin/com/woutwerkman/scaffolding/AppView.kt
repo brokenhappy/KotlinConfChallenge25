@@ -34,7 +34,6 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.times
@@ -181,10 +180,10 @@ fun AppPreview(currentChallenge: Challenge, voteStatus: VoteStatus? = null) {
             }
 
             if (phase == ChallengePhase.SUSPENSE) {
-                SuspenseOverlay(color2, color1)
+                SuspenseOverlay(color2, color1, "Ohhh exciting! What will the UI become?")
             }
             if (phase == ChallengePhase.VOTING) {
-                VoteResultsOverlay(voteStatus, teamBlue)
+                SuspenseOverlay(color2, color1, "Time to vote!")
             }
         }
     }
