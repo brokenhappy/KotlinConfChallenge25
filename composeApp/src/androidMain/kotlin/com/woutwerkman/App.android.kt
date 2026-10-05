@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
@@ -14,7 +16,12 @@ class AppActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Box(modifier = Modifier.background(Color.White)) {
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize()
+                    .safeDrawingPadding()
+            ) {
                 App()
             }
         }
