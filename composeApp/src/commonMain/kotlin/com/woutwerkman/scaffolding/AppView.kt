@@ -36,6 +36,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.times
 
 @Serializable
@@ -65,7 +66,7 @@ fun AppPreview(currentChallenge: Challenge, voteStatus: VoteStatus? = null) {
 
         val phase = when {
             timeUntilEndOfChallenge > currentChallenge.duration -> ChallengePhase.PREPARING
-            timeUntilEndOfChallenge > 2.minutes -> ChallengePhase.RUNNING
+            timeUntilEndOfChallenge > 30.seconds -> ChallengePhase.RUNNING
             timeUntilEndOfChallenge > Duration.ZERO -> ChallengePhase.SUSPENSE
             else -> ChallengePhase.VOTING
         }
