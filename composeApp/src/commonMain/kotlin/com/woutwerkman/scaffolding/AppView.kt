@@ -182,9 +182,9 @@ fun AppPreview(currentChallenge: Challenge, voteStatus: VoteStatus? = null) {
             if (phase == ChallengePhase.SUSPENSE) {
                 SuspenseOverlay(color2, color1, "Ohhh exciting! What will the UI become?")
             }
-            if (phase == ChallengePhase.VOTING) {
-                SuspenseOverlay(color2, color1, "Time to vote!")
-            }
+//            if (phase == ChallengePhase.VOTING) {
+//                SuspenseOverlay(color2, color1, "Time to vote!")
+//            }
         }
     }
 }
