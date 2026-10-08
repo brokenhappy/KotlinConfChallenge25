@@ -132,7 +132,7 @@ fun AppPreview(currentChallenge: Challenge, voteStatus: VoteStatus? = null) {
             }
         }
 
-        val showOverlay = phase == ChallengePhase.SUSPENSE || phase == ChallengePhase.VOTING
+        val showOverlay = phase == ChallengePhase.SUSPENSE
         val blurRadius = if (showOverlay) 48.dp else 0.dp
 
         @Composable
